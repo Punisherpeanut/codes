@@ -1,0 +1,52 @@
+#include <stdio.h>
+
+#define MAX_FRAMES 10
+#define MAX_PAGES 30
+
+int main() {
+    int frames[MAX_FRAMES], pages[MAX_PAGES], temp[MAX_FRAMES];
+    int n_frames, n_pages, faults = 0, i, j, k, pos, max;
+
+    printf("Enter number of frames and pages: ");
+    scanf("%d %d", &n_frames, &n_pages);
+    
+    printf("Enter page reference string: ");
+    for(i = 0; i < n_pages; i++)
+        scanf("%d", &pages[i]);
+
+    for(i = 0; i < n_frames; i++)
+        frames[i] = -1;
+
+    for(i = 0; i < n_pages; i++) {
+        if(frames[j = 0] != pages[i])
+            while(j < n_frames && frames[j] != pages[i]) j++;
+
+        if(j == n_frames) {
+            if(frames[j = 0] == -1)
+                while(frames[j] != -1) j++;
+            else {
+                for(k = 0; k < n_frames; k++) {
+                    temp[k] = -1;
+                    for(pos = i + 1; pos < n_pages; pos++)
+                        if(frames[k] == pages[pos]) {
+                            temp[k] = pos;
+                            break;
+                        }
+                }
+                for(j = 0, max = temp[0]; j < n_frames; j++)
+                    if(temp[j] == -1) { pos = j; break; }
+                    else if(temp[j] > max) { max = temp[j]; pos = j; }
+                j = pos;
+            }
+            frames[j] = pages[i];
+            faults++;
+        }
+
+        printf("\n");
+        for(j = 0; j < n_frames; j++)
+            printf("%d\t", frames[j]);
+    }
+    
+    printf("\n\nTotal Page Faults = %d\n", faults);
+    return 0;
+}
